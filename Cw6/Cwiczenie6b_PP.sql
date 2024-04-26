@@ -7,11 +7,11 @@ SET telefon = CONCAT('(+48)', ' ', telefon)
 
 -- b)
 
-UPDATE ksiegowosc.pracownicy
-SET telefon = REPLACE(telefon, ' ', '-')
+UPDATE rozliczenia.pracownicy
+SET telefon = CONCAT(SUBSTRING(telefon, 1, 3), '-', SUBSTRING(telefon, 4, 3), '-', SUBSTRING(telefon, 7, 3))
 
 
--- c) Upper pomijamy róznice duzych i malych liter
+-- c) Upper pomijamy rÃ³znice duzych i malych liter
 
 SELECT id_pracownika, UPPER(imie) AS imie, UPPER(nazwisko) AS nazwisko, UPPER(adres) AS adres, telefon
 FROM ksiegowosc.pracownicy
@@ -27,8 +27,8 @@ JOIN ksiegowosc.wynagrodzenie w ON p.id_pracownika = w.id_pracownika
 JOIN ksiegowosc.pensje pe ON w.id_pensji = pe.id_pensji
 
 
--- f)zachowanie wszystkich danych z lewej tabeli niezale¿nie od tego, 
--- czy maj¹ one odpowiedniki w prawej tabeli. 
+-- f)zachowanie wszystkich danych z lewej tabeli niezaleÅ¼nie od tego, 
+-- czy majÅ¡ one odpowiedniki w prawej tabeli. 
 
 SELECT p.id_pracownika, p.imie, p.nazwisko, pe.kwota AS pensja, pr.rodzaj AS premia
 FROM ksiegowosc.pracownicy p
@@ -39,8 +39,8 @@ LEFT JOIN ksiegowosc.premie pr ON w.id_premii = pr.id_premii
 
 -- g)
 
-SELECT CONCAT('Pracownik ', p.imie, ' ', p.nazwisko, ', w dniu ', w.data_, ' otrzyma³ pensjê ca³kowit¹ na kwotê ', 
-pn.kwota, ' z³, gdzie wynagrodzenie zasadnicze wynosi³o: ', pn.kwota, ' z³, premia: ', pr.kwota, ' z³, nadgodziny: ', 
+SELECT CONCAT('Pracownik ', p.imie, ' ', p.nazwisko, ', w dniu ', w.data_, ' otrzymaÅ‚ pensjÄ™ caÅ‚kowitÅ¡ na kwotÄ™ ', 
+pn.kwota, ' zÅ‚, gdzie wynagrodzenie zasadnicze wynosiÅ‚o: ', pn.kwota, ' zÅ‚, premia: ', pr.kwota, ' zÅ‚, nadgodziny: ', 
 CASE
         WHEN godz.liczba_godzin > 160 THEN CAST(godz.liczba_godzin - 160 AS VARCHAR(10))
         ELSE '0'
